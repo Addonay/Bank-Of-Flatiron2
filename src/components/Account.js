@@ -1,142 +1,86 @@
-import React, {Component} from "react";
+import React, { useState, useEffect } from "react";
 import Transactionlist from "./Transactionlist";
 import Search from "./Search";
 import AddTransaction from "./AddTransaction";
 import "../stylesheets/App.css";
 
+const filterTransactions = (transactions, search, select) => {
+  let filteredData = [...transactions];
 
-class Account extends Component {
+  filteredData = filteredData.filter((transaction) => {
+    return transaction.description.toLowerCase().includes(search.toLowerCase());
+  });
 
-  state = {
-    transactions : [],
-    search: "",
-    select: "all"
-  } 
-
-  componentDidMount() {
-    fetch('http://localhost:8001/transactions')
-      .then(r => r.json())
-      .then(resp => {
-        this.setState({
-          transactions: resp
-        });
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
+  switch (select) {
+    case "descriptionUP":
+      filteredData.sort((a, b) => a.description.localeCompare(b.description));
+      break;
+    case "descriptionDOWN":
+      filteredData.sort((a, b) => b.description.localeCompare(a.description));
+      break;
+    case "categoryUP":
+      filteredData.sort((a, b) => a.category.localeCompare(b.category));
+      break;
+    case "categoryDOWN":
+      filteredData.sort((a, b) => b.category.localeCompare(a.category));
+      break;
+    case "amountUP":
+      filteredData.sort((a, b) => a.amount - b.amount);
+      break;
+    case "amountDOWN":
+      filteredData.sort((a, b) => b.amount - a.amount);
+      break;
+    case "dateUP":
+      filteredData.sort((a, b) => new Date(a.date) - new Date(b.date));
+      break;
+    case "dateDOWN":
+      filteredData.sort((a, b) => new Date(b.date) - new Date(a.date));
+      break;
+    default:
+      break;
   }
-  
 
-  addTransactionFun = (newTransaction) => {
-    this.setState(prevState => ({
-      transactions: [...prevState.transactions, newTransaction]
-    }));
+  return filteredData;
+};
+
+const Account = () => {
+  const [transactions, setTransactions] = useState([]);
+  const [search, setSearch] = useState("");
+  const [select, setSelect] = useState("all");
+  const [filteredTransactions, setFilteredTransactions] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8001/transactions")
+      .then((response) => response.json())
+      .then((data) => setTransactions(data));
+  }, []);
+
+  useEffect(() => {
+    setFilteredTransactions(filterTransactions(transactions, search, select));
+  }, [search, select, transactions]);
+
+  const addTransaction = (newTransaction) => {
+    setTransactions((prevTransactions) => [...prevTransactions, newTransaction]);
   };
 
-  deleteTransactionFun = (deletedTransaction) => {
-    let newTransArr = this.state.transactions.filter(transaction => {
-      return transaction.id !== deletedTransaction.id
-    })
-
-    this.setState({
-      transactions: newTransArr
-    })
-  }
-
-
-
-  searchFun = (searchResult) => {
-    this.setState({
-      search: searchResult
-    })
-  }
-
-  selectFun = (selectedResult) => {
-    this.setState({
-      select: selectedResult
-    })
-  }
-
-
-
-  filterSearchTransactions = () => {
-    let {transactions, search, select} = this.state
-    
-    let filterSearch = transactions.filter(transaction => {
-      return transaction.description.toLowerCase().includes(search.toLowerCase())
-    })
-
-    switch(select){
-      case "all" :
-        return filterSearch
-
-      case "descriptionUP" : 
-        return filterSearch.sort( (wordA, wordB) => {
-            return wordA.description.localeCompare(wordB.description)
-        })
-
-      case "descriptionDOWN" : 
-      return filterSearch.sort( (wordA, wordB) => {
-          return wordB.description.localeCompare(wordA.description)
-      })
-        
-      case "categoryUP" : 
-      return filterSearch.sort( (wordA, wordB) => {
-          return wordA.category.localeCompare(wordB.category)
-      })
-
-      case "categoryDOWN" : 
-      return filterSearch.sort( (wordA, wordB) => {
-          return wordB.category.localeCompare(wordA.category)
-      })
-
-      case "amountUP" : 
-      return filterSearch.sort( (numA, numB) => {
-          return numA.amount - numB.amount
-      })
-
-      case "amountDOWN" : 
-      return filterSearch.sort( (numA, numB) => {
-          return numB.amount - numA.amount
-      })
-
-      case "dateUP" : 
-      return filterSearch.sort( (numA, numB) => {
-          return new Date(numA.date) - new Date(numB.date)
-      })
-
-      case "dateDOWN" : 
-      return filterSearch.sort( (numA, numB) => {
-          return new Date(numB.date) - new Date(numA.date)
-      })
-
-      default:
-    }
-  }
-
-
-
-  render() {
-    return (
-      <div>
-        <Search 
-           searchValue={this.state.search}
-           searchFun={this.searchFun}
-        />
-
-        <AddTransaction 
-          addTransactionFun={this.addTransactionFun}
-        />
-
-        <Transactionlist
-          transactions={this.filterSearchTransactions()}
-          select={this.state.select}
-          selectFun={this.selectFun}
-          deleteTransactionFun={this.deleteTransactionFun}
-         />
-      </div>
+  const deleteTransaction = (deletedTransaction) => {
+    setTransactions((prevTransactions) =>
+      prevTransactions.filter((transaction) => transaction.id !== deletedTransaction.id)
     );
-  }
-}
+  };
+
+  return (
+    <div>
+      <Search searchValue={search} searchFun={setSearch} />
+      <AddTransaction addTransactionFun={addTransaction} />
+      <Transactionlist
+        transactions={filteredTransactions}
+        select={select}
+        onSelect={setSelect}
+        deleteTransactionFun={deleteTransaction}
+      />
+    </div>
+  );
+};
 
 export default Account;
