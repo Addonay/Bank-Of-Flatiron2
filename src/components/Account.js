@@ -13,15 +13,19 @@ class Account extends Component {
     select: "all"
   } 
 
-  componentDidMount(){
+  componentDidMount() {
     fetch('http://localhost:8001/transactions')
-    .then(r => r.json())
-    .then(resp => {
-      this.setState({
-        transactions: resp
+      .then(r => r.json())
+      .then(resp => {
+        this.setState({
+          transactions: resp
+        });
       })
-    })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
   }
+  
 
   addTransactionFun = (newTransaction) => {
     this.setState(prevState => ({
