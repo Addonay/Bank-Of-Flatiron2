@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import "../stylesheets/App.css";
 
 class AddTransaction extends Component {
 
@@ -46,8 +47,8 @@ class AddTransaction extends Component {
   render() {
 
     return (
-      <div className="ui segment">
-        <form className="ui form" onSubmit={this.handleSubmit}>
+      <div className="segment">
+        <form className="form" onSubmit={this.handleSubmit}>
           <div className="inline fields">
             <input 
               type="date" 
@@ -78,7 +79,7 @@ class AddTransaction extends Component {
               onChange={this.handleChange}
             />
           </div>
-          <button className="ui button" type="submit" > 
+          <button className="button" type="submit" > 
             Add Transaction
           </button>
         </form>

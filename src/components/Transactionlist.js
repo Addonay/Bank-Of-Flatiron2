@@ -1,6 +1,8 @@
 import React from "react";
 import Transaction from "./Transaction";
-import Select from "./Select"
+import Select from "./Select";
+import "../stylesheets/App.css";
+import Search from "./Search";
 
 const Transactionlist = (props) => {
 
@@ -10,30 +12,32 @@ const Transactionlist = (props) => {
             transaction={transactionObj} 
             deleteTransactionFun={props.deleteTransactionFun}
           />
-  })
-
+  });
 
   return (
-    <table className="ui celled striped padded table">
-      <tbody>
-        <tr>
-          <th>
-            <h3 className="ui center aligned header">Date</h3>
-          </th>
-          <th>
-            <h3 className="ui center aligned header">Description</h3>
-            < Select select={props.select} selectFun={props.selectFun}/>
-          </th>
-          <th>
-            <h3 className="ui center aligned header">Category</h3>
-          </th>
-          <th>
-            <h3 className="ui center aligned header">Amount</h3>
-          </th>
-        </tr>
-        {componentArray}
-      </tbody>
-    </table>
+    <div className="transaction-list">
+      <h2 className="ui header">Transaction List</h2>
+
+      <div className="transaction-controls">
+        <Select select={props.select} selectFun={props.selectFun} />
+        <Search searchValue={props.searchValue} searchFun={props.searchFun} />
+      </div>
+
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {componentArray}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

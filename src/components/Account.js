@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import Transactionlist from "./Transactionlist";
 import Search from "./Search";
 import AddTransaction from "./AddTransaction";
+import "../stylesheets/App.css";
 
 
 class Account extends Component {
