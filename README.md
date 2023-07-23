@@ -128,4 +128,5 @@ Example Response:
 ```
 
 Author: Addonay Osoro
+
 License: MIT
