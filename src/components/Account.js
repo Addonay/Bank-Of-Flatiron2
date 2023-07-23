@@ -23,22 +23,11 @@ class Account extends Component {
     })
   }
 
-
-  // addTransactionFun = (addTransaction) =>{
-  //   let newTransArr = [...this.state.transactions, addTransaction]
-  //   this.setState({
-  //     transactions: newTransArr
-  //   })
-  // }
-  
-
-  addTransactionFun = (addTransaction) =>{
-    this.setState(prevState => {
-      return {
-        transactions: [...prevState.transactions, addTransaction]
-      }
-    })
-  }
+  addTransactionFun = (newTransaction) => {
+    this.setState(prevState => ({
+      transactions: [...prevState.transactions, newTransaction]
+    }));
+  };
 
   deleteTransactionFun = (deletedTransaction) => {
     let newTransArr = this.state.transactions.filter(transaction => {
