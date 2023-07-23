@@ -1,90 +1,95 @@
-import React, {Component} from "react";
+import React, { useState } from "react";
 import "../stylesheets/App.css";
 
-class AddTransaction extends Component {
+const AddTransaction = ({ addTransactionFun }) => {
+  const [date, setDate] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
+  const [amount, setAmount] = useState("");
 
-  state = {
-    date: "",
-    description: "",
-    category: "",
-    amount: ""
-  }
-
-  handleChange = (evt) => {
-    this.setState({
-      [evt.target.name]: evt.target.value
-    });
+  const handleChange = (evt) => {
+    const { name, value } = evt.target;
+    switch (name) {
+      case "date":
+        setDate(value);
+        break;
+      case "description":
+        setDescription(value);
+        break;
+      case "category":
+        setCategory(value);
+        break;
+      case "amount":
+        setAmount(value);
+        break;
+      default:
+        break;
+    }
   };
 
-  
-  handleSubmit = (evt) => {
+  const handleSubmit = (evt) => {
     evt.preventDefault();
     fetch("http://localhost:8001/transactions", {
       method: "POST",
       headers: {
-        'content-type': 'application/json'
+        "content-type": "application/json"
       },
       body: JSON.stringify({
-        date: this.state.date,
-        description: this.state.description,
-        category: this.state.category,
-        amount: this.state.amount
+        date,
+        description,
+        category,
+        amount
       })
     })
-      .then(r => r.json())
-      .then(newTransaction => {
-        this.props.addTransactionFun(newTransaction);
-        this.setState({
-          date: "",
-          description: "",
-          category: "",
-          amount: ""
-        });
+      .then((response) => response.json())
+      .then((newTransaction) => {
+        addTransactionFun(newTransaction);
+        setDate("");
+        setDescription("");
+        setCategory("");
+        setAmount("");
       });
   };
 
-  render() {
-
-    return (
-      <div className="segment">
-        <form className="form" onSubmit={this.handleSubmit}>
-          <div className="inline fields">
-            <input 
-              type="date" 
-              name="date" 
-              value={this.state.date}
-              onChange={this.handleChange}
-            />
-            <input 
-              type="text" 
-              name="description" 
-              placeholder="Description" 
-              value={this.state.description}
-              onChange={this.handleChange}
-            />
-            <input 
-              type="text" 
-              name="category" 
-              placeholder="Category" 
-              value={this.state.category}
-              onChange={this.handleChange}
-            />
-            <input
-              type="number"
-              name="amount"
-              placeholder="Amount"
-              step="0.01"
-              value={this.state.amount}
-              onChange={this.handleChange}
-            />
-          </div>
-          <button className="button" type="submit" > 
-            Add Transaction
-          </button>
-        </form>
-      </div>
-    );
-  }
-}
+  return (
+    <div className="segment">
+      <form className="form" onSubmit={handleSubmit}>
+        <div className="inline fields">
+          <input
+            type="date"
+            name="date"
+            value={date}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="description"
+            placeholder="Description"
+            value={description}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="category"
+            placeholder="Category"
+            value={category}
+            onChange={handleChange}
+          />
+          <input
+            type="number"
+            name="amount"
+            placeholder="Amount"
+            step="0.01"
+            value={amount}
+            onChange={handleChange}
+          />
+        </div>
+        <button className="button" type="submit">
+          Add Transaction
+        </button>
+      </form>
+    </div>
+  );
+};
 
 export default AddTransaction;
