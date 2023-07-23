@@ -10,10 +10,16 @@ class AddTransaction extends Component {
     amount: ""
   }
 
+  handleChange = (evt) => {
+    this.setState({
+      [evt.target.name]: evt.target.value
+    });
+  };
 
+  
   handleSubmit = (evt) => {
-    evt.preventDefault()
-    fetch('http://localhost:8001/transactions', {
+    evt.preventDefault();
+    fetch("http://localhost:8001/transactions", {
       method: "POST",
       headers: {
         'content-type': 'application/json'
@@ -25,24 +31,17 @@ class AddTransaction extends Component {
         amount: this.state.amount
       })
     })
-    .then(r => r.json())
-    .then(addTransaction => {
-      this.props.addTransactionFun(addTransaction)
-      this.setState({
-        date: "",
-        description: "",
-        category: "",
-        amount: ""
-      })
-    })
-
-  }
-
-  handleChange = (evt) => {
-    this.setState({
-      [evt.target.name] : evt.target.value
-    })
-  }
+      .then(r => r.json())
+      .then(newTransaction => {
+        this.props.addTransactionFun(newTransaction);
+        this.setState({
+          date: "",
+          description: "",
+          category: "",
+          amount: ""
+        });
+      });
+  };
 
   render() {
 
