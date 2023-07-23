@@ -1,5 +1,5 @@
-import React from "react";
-import Transactionlist from "./Transactionslist";
+import React, {Component} from "react";
+import Transactionlist from "./Transactionlist";
 import Search from "./Search";
 import AddTransaction from "./AddTransaction";
 
@@ -134,7 +134,7 @@ class Account extends Component {
           addTransactionFun={this.addTransactionFun}
         />
 
-        <Transactionslist
+        <Transactionlist
           transactions={this.filterSearchTransactions()}
           select={this.state.select}
           selectFun={this.selectFun}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Component} from "react";
 import Account from "./Account";
 import "../stylesheets/App.css";
 
