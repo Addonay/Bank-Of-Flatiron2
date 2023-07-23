@@ -11,6 +11,7 @@ text-align: center;
 .search.input input {
   width: 100%;
   padding: 0.8rem 2.5rem 0.8rem 0.8rem;
+  margin-bottom: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
@@ -59,7 +60,7 @@ h1, h2, h3, h4, h5, h6 {
 .transaction-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 2rem;
+  margin-top: 0.5rem;
 }
 
 .transaction-table th,
@@ -167,4 +168,58 @@ h1, h2, h3, h4, h5, h6 {
 
 .action-buttons button:last-child {
   margin-right: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.inline.fields {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.inline.fields input[type="date"] {
+  font-size: 15px;
+}
+
+.inline.fields input {
+  flex: 1;
+  padding: 10px;
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+
+.inline.fields input[type="text"],
+.inline.fields input[type="number"] {
+  flex: 1;
+  padding: 10px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  width: 200px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 0 auto;
+}
+
+.button:hover {
+  background-color: #0056b3;
 }
